@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public int maxHealth = 100;
+    public int maxHealth = 30;
     private int currentHealth;
     private Rigidbody rb;
     public float moveSpeed = 2f;
@@ -13,22 +13,29 @@ public class Enemy : MonoBehaviour
     {
         Vector3 targetPosition = Vector3.zero; // Center of the world
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        Vector3 direction = (Vector3.zero - transform.position).normalized;
+        if (direction != Vector3.zero)
+            transform.rotation = Quaternion.LookRotation(direction);
+
     }
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
+        currentHealth = maxHealth;
     }
+
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
-        Debug.Log("osuu");
+        Debug.Log($"{gameObject.name} took {amount} damage. Current HP: {currentHealth}");
 
         if (currentHealth <= 0)
         {
             Die();
         }
     }
+
     void Die()
     {
         Debug.Log($"{gameObject.name} died.");

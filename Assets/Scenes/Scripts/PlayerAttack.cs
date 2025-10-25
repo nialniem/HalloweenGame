@@ -17,23 +17,30 @@ public class PlayerAttack : MonoBehaviour
 
     void Attack()
     {
-        float radius = 1.2f;
-        Vector3 center = transform.position + transform.forward * 0.6f;
+        float radius = 2f;
+        Vector3 attackOrigin = transform.position + transform.forward * 0.6f;
 
-        Collider[] hits = Physics.OverlapSphere(center, radius);
+        Collider[] hits = Physics.OverlapSphere(attackOrigin, radius);
         HashSet<GameObject> damagedEnemies = new HashSet<GameObject>();
 
         foreach (Collider hit in hits)
         {
             GameObject target = hit.gameObject;
 
-            if (target.CompareTag("Enemy") && !damagedEnemies.Contains(target))
+            if (target != null && target.CompareTag("Enemy") && !damagedEnemies.Contains(target))
             {
-                target.GetComponent<Enemy>()?.TakeDamage(30);
-                damagedEnemies.Add(target);
+                Enemy enemy = target.GetComponent<Enemy>();
+
+                if (enemy != null)
+                {
+                    damagedEnemies.Add(target);
+                    enemy.TakeDamage(999);
+                }
             }
         }
     }
+
+
 
 
 }
