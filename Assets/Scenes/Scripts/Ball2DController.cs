@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,7 +12,8 @@ public class Ball2DController : MonoBehaviour
     [SerializeField] private InputActionReference movement, pointerPosition, attack;
 
 
-    private WeaponParent weaponParent;
+    [SerializeField] private WeaponParent weaponParent;
+
 
     void Awake()
     {
@@ -39,19 +41,39 @@ public class Ball2DController : MonoBehaviour
 
     void Update()
     {
+       
         Vector2 pointerInput = GetPointerInput();
         weaponParent.PointerPosition = pointerInput;
-
-        if (weaponParent != null)
+        if (attack.action != null && attack.action.WasPressedThisFrame())
         {
-            weaponParent.PointerPosition = pointerInput;
+            Debug.Log("Attack input detected");
+
+            if (attack.action != null && attack.action.WasPressedThisFrame())
+            {
+                StartCoroutine(weaponParent.Swing(-150f, 0.2f));
+            }
+
         }
+
     }
+
+    private IEnumerator UnlockWeaponAim(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        weaponParent.aimEnabled = true;
+    }
+
 
     private Vector2 GetPointerInput()
     {
         Vector3 mousePos = pointerPosition.action.ReadValue<Vector2>();
         mousePos.z = Camera.main.nearClipPlane;
         return Camera.main.ScreenToWorldPoint(mousePos);
+    }
+    private void RotateWeaponBy(float zDegrees)
+    {
+        Vector3 currentEuler = weaponParent.transform.eulerAngles;
+        currentEuler.z += zDegrees;
+        weaponParent.transform.eulerAngles = currentEuler;
     }
 }

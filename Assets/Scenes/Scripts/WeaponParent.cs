@@ -1,10 +1,12 @@
+using System.Collections;
 using UnityEngine;
 
 public class WeaponParent : MonoBehaviour
 {
     public Vector2 PointerPosition { get; set; }
     public bool IsAttacking { get; set; }
-
+    public bool LockRotation { get; internal set; }
+    public bool aimEnabled = true;
     [Header("Swing Settings")]
     public float swingSpeed = 5f;
     public float swingAngle = 45f;
@@ -13,8 +15,13 @@ public class WeaponParent : MonoBehaviour
 
     void Update()
     {
+
         Vector2 aimDirection = (PointerPosition - (Vector2)transform.position).normalized;
         float baseAngle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+        if (aimEnabled)
+        {
+            transform.right = (PointerPosition - (Vector2)transform.position).normalized;
+        }
 
         if (IsAttacking)
         {
@@ -28,4 +35,24 @@ public class WeaponParent : MonoBehaviour
             transform.right = aimDirection; // reset to aim without offset
         }
     }
+    public IEnumerator Swing(float angle, float duration)
+    {
+        aimEnabled = false;
+
+        float elapsed = 0f;
+        float startZ = transform.eulerAngles.z;
+        float targetZ = startZ + angle;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+            float z = Mathf.Lerp(startZ, targetZ, t);
+            transform.rotation = Quaternion.Euler(0f, 0f, z);
+            yield return null;
+        }
+
+        aimEnabled = true;
+    }
+
 }
