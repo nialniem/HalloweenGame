@@ -28,8 +28,10 @@ public class StoneScript : MonoBehaviour
     void Die()
     {
         Debug.Log($"{gameObject.name} (StoneStatue) died.");
-        Destroy(gameObject); // Or play animation, etc.
+        FindObjectOfType<GameManager>().EndGame();
+        Destroy(gameObject);
     }
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -37,6 +39,7 @@ public class StoneScript : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             TakeDamage(5); // Damage from enemy touch
+            Destroy(other.gameObject);
         }
     }
 }

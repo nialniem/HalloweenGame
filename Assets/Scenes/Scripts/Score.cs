@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 public class Score : MonoBehaviour
@@ -19,10 +20,9 @@ public class Score : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
+    public int GetScore()
     {
-        
+        return score;
     }
     public void AddPoints(int amount)
     {

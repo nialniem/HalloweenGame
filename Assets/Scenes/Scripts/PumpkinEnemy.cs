@@ -4,7 +4,7 @@ public class PumpkinEnemy : MonoBehaviour
 {
     public int maxHealth = 30;
     private int currentHealth;
-
+    private Vector2 movementDirection;
     private Rigidbody2D rb;
     public float moveSpeed = 2f;
 
@@ -14,7 +14,10 @@ public class PumpkinEnemy : MonoBehaviour
         rb.gravityScale = 0f; // Prevent falling
         currentHealth = maxHealth;
     }
-
+    public void SetMovementDirection(Vector2 dir)
+    {
+        movementDirection = dir;
+    }
     void FixedUpdate()
     {
         Vector2 targetPosition = Vector2.zero; // Center of the world
@@ -23,16 +26,21 @@ public class PumpkinEnemy : MonoBehaviour
         // Move using Rigidbody2D
         rb.MovePosition(rb.position + direction * moveSpeed * Time.fixedDeltaTime);
 
-        // Rotate to face movement direction
-        if (direction != Vector2.zero)
+        /// Keep upright rotation
+        rb.rotation = 0f;
+
+        // Flip sprite based on direction
+        SpriteRenderer sr = GetComponentInChildren<SpriteRenderer>();
+        if (sr != null)
         {
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            rb.rotation = angle;
+            sr.flipX = direction.x < 0;
         }
+
     }
 
     public void TakeDamage(int amount)
     {
+
         currentHealth -= amount;
         Debug.Log($"{gameObject.name} took {amount} damage. Current HP: {currentHealth}");
 
