@@ -15,12 +15,12 @@ public class WeaponParent : MonoBehaviour
 
     void Update()
     {
-
-        Vector2 aimDirection = (PointerPosition - (Vector2)transform.position).normalized;
+        Vector2 aimDirection = (PointerPosition - (Vector2)transform.parent.position).normalized;
         float baseAngle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+
         if (aimEnabled)
         {
-            transform.right = (PointerPosition - (Vector2)transform.position).normalized;
+            transform.right = aimDirection;
         }
 
         if (IsAttacking)
@@ -32,9 +32,14 @@ public class WeaponParent : MonoBehaviour
         else
         {
             swingTimer = 0f;
-            transform.right = aimDirection; // reset to aim without offset
+            transform.right = aimDirection;
         }
+
+       
+        float swordRadius = 0.5f;
+        transform.position = (Vector2)transform.parent.position + aimDirection * swordRadius;
     }
+
     public IEnumerator Swing(float angle, float duration)
     {
         aimEnabled = false;
