@@ -33,6 +33,11 @@ public class Enemy : MonoBehaviour
         if (currentHealth <= 0)
         {
             Die();
+            Score scoreScript = FindObjectOfType<Score>();
+            if (scoreScript != null)
+            {
+                scoreScript.AddPoints(1); // Or however many points
+            }
         }
     }
 
