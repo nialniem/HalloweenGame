@@ -41,6 +41,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
+
     void Die()
     {
         Debug.Log($"{gameObject.name} died.");

@@ -7,13 +7,13 @@ public class Score : MonoBehaviour
 
     public Text scoreText;
     public GameObject attackObject; // Assign this in the Inspector
-    private Enemy attackScript;
+    
 
     int score = 0;
 
     void Start()
     {
-        attackScript = attackObject.GetComponent<Enemy>();
+        
 
         scoreText.text = score.ToString() + " POINTS";
 

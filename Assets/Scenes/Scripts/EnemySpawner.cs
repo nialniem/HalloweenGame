@@ -6,6 +6,8 @@ public class EnemySpawner : MonoBehaviour
     public float spawnRadius = 10f;
     public float spawnInterval = 2f;
     public int enemiesPerSpawn = 2;
+    public float minSpawnRadius = 5f;
+
 
     void Start()
     {
@@ -22,19 +24,17 @@ public class EnemySpawner : MonoBehaviour
                 return;
             }
 
+            // Pick a random point on a circle, scaled by a safe radius
             float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
-            Vector2 randomPoint = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * spawnRadius;
+            float distance = Random.Range(minSpawnRadius, spawnRadius); // ensures distance >= min
 
-            
-            Vector3 spawnPos = transform.position + new Vector3(randomPoint.x, 0f, randomPoint.y);
+            Vector3 offset = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)) * distance;
+            Vector3 spawnPos = transform.position + offset;
 
             Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
         }
     }
 
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, spawnRadius);
-    }
+
+    
 }
