@@ -5,6 +5,7 @@ public class StoneScript : MonoBehaviour
     public int maxHealth = 10;
     private int currentHealth;
     private Rigidbody2D rb;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -30,12 +31,12 @@ public class StoneScript : MonoBehaviour
         Destroy(gameObject); // Or play animation, etc.
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         // If an enemy hits the statue, take damage
         if (other.CompareTag("Enemy"))
         {
-            TakeDamage(5); // Example damage amount from enemy
+            TakeDamage(5); // Damage from enemy touch
         }
     }
 }
