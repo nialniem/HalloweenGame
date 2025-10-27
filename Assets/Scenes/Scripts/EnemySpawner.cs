@@ -7,10 +7,37 @@ public class EnemySpawner : MonoBehaviour
     public float minSpawnRadius = 5f;
     public float spawnInterval = 2f;
     public int enemiesPerSpawn = 2;
+    public float intervalIncrement = 1f; // How much to increase interval each time
+
+    private int currentLevel = 1; // Starts from 1 (15 points)
+    private Score scoreScript;
 
     void Start()
     {
+        scoreScript = FindObjectOfType<Score>();
+
+        if (scoreScript == null)
+        {
+            Debug.LogError("Score script not found in the scene.");
+            return;
+        }
+
         InvokeRepeating(nameof(SpawnEnemy), 1f, spawnInterval);
+    }
+
+    void Update()
+    {
+        int score = scoreScript.GetScore();
+
+        if (score >= currentLevel * 15)
+        {
+            spawnInterval += intervalIncrement;
+            CancelInvoke(nameof(SpawnEnemy));
+            InvokeRepeating(nameof(SpawnEnemy), 0f, spawnInterval);
+            currentLevel++;
+
+            Debug.Log($"Spawn interval increased to {spawnInterval} after reaching {score} points.");
+        }
     }
 
     void SpawnEnemy()
@@ -29,20 +56,16 @@ public class EnemySpawner : MonoBehaviour
             Vector2 spawnPos = (Vector2)transform.position + offset;
 
             GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
-
             Vector2 direction = ((Vector2)Vector2.zero - spawnPos).normalized;
 
-            // Keep upright
             enemy.transform.rotation = Quaternion.identity;
 
-            // Flip sprite based on X direction
             SpriteRenderer sr = enemy.GetComponentInChildren<SpriteRenderer>();
             if (sr != null)
             {
                 sr.flipX = (direction.x < 0);
             }
 
-            // Optionally, set movement direction in enemy script
             PumpkinEnemy enemyScript = enemy.GetComponent<PumpkinEnemy>();
             if (enemyScript != null)
             {
@@ -50,5 +73,4 @@ public class EnemySpawner : MonoBehaviour
             }
         }
     }
-
 }

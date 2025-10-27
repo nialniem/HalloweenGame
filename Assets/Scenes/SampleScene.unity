@@ -2524,6 +2524,7 @@ MonoBehaviour:
   minSpawnRadius: 10
   spawnInterval: 2
   enemiesPerSpawn: 2
+  intervalIncrement: 1
 --- !u!4 &1548858378
 Transform:
   m_ObjectHideFlags: 0
@@ -2651,6 +2652,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PumpkinEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 207357098451591507, guid: ad45a508af127314b887213bec732533, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 207357098451591513, guid: ad45a508af127314b887213bec732533, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -2697,7 +2702,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 207357098451591518, guid: ad45a508af127314b887213bec732533, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad45a508af127314b887213bec732533, type: 3}
